@@ -1,0 +1,55 @@
+---
+- name: remove default ruby
+  yum: name=ruby state=absent
+
+- name: install developper packages
+  yum: name={{ item }} state=present
+  with_items:
+    - bzip2
+    - gcc
+    - gcc-c++
+    - gdbm-devel
+    - libffi-devel
+    - libyaml-devel
+    - ncurses-devel
+    - mysql-devel
+    - openssl-devel
+    - readline-devel
+    - sqlite-devel
+    - zlib-devel
+
+- name: verify ruby version
+  command: /usr/bin/ruby -v
+  register: stdout_ruby_version
+  changed_when: False
+  ignore_errors: True
+
+- name: download ruby package
+  get_url: url={{ ruby_download_url }} dest=/usr/local/src/ruby-{{ ruby_version }}.tar.gz
+  when: stdout_ruby_version|failed or stdout_ruby_version.stdout.find(ruby_version) == -1
+
+- name: extract ruby package
+  unarchive:
+    src: /usr/local/src/ruby-{{ ruby_version }}.tar.gz
+    dest: /usr/local/src
+    copy: no
+  when: stdout_ruby_version|failed or stdout_ruby_version.stdout.find(ruby_version) == -1
+
+- name: clean file
+  file: path=/usr/local/src/ruby-{{ ruby_version }}.tar.gz state=absent
+
+- name: build ruby
+  command: >
+    {{ item }}
+    chdir=/usr/local/src/ruby-{{ ruby_version }}
+  with_items:
+    - ./configure --prefix=/usr --enable-shared
+    - make
+    - make install
+  when: stdout_ruby_version|failed or stdout_ruby_version.stdout.find(ruby_version) == -1
+
+- name: update rubygems
+  command: gem update --system
+
+- name: install bundler
+  gem: name=bundler state=present user_install=no version={{ bundler_version }}

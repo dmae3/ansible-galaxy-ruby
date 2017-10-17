@@ -1,0 +1,4 @@
+---
+ruby_version: 2.4.2
+ruby_download_url: http://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.2.tar.gz
+bundler_version: 1.15.4
