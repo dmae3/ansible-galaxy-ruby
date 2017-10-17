@@ -33,7 +33,7 @@ Example Playbook
 - hosts: all
   become: true
   roles:
-    - { role: ruby, ruby_version: 2.3.3, ruby_download_url: 'http://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz', bundler_version: 1.13.6 }
+    - { role: galaxy-ruby, ruby_version: 2.3.3, ruby_download_url: 'http://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz', bundler_version: 1.13.6 }
 ```
 
 License
