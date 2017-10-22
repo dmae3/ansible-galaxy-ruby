@@ -11,6 +11,8 @@
     - gdbm-devel
     - libffi-devel
     - libyaml-devel
+    - libxml2-devel
+    - libxslt-devel
     - ncurses-devel
     - mysql-devel
     - openssl-devel
